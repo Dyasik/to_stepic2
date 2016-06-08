@@ -1,0 +1,37 @@
+# What should you do to pass the tests on https://stepic.org/lesson/MVC-%D1%84%D1%80%D0%B5%D0%B9%D0%BC%D0%B2%D0%BE%D1%80%D0%BA%D0%B8-14827/step/11?unit=4176
+git clone https://github.com/Dyasik/to_stepic2 /home/box/web
+cd web
+django-admin startproject ask
+cd ask
+python manage.py startapp qa
+cd qa
+-*-*-*-
+nano views.py
+	from django.http import HttpResponse 
+	def test(request, *args, **kwargs):
+    	return HttpResponse('OK')
+-*-*-*-
+cd ..
+cd ask
+-*-*-*-
+nano urls.py
+	url(r"^$", "qa.views.test"),                                                
+    url(r"^login/?.*$", "qa.views.test"),                                       
+    url(r'^signup/?.*$', 'qa.views.test'),                                      
+    url(r'^question/\d+.*$', 'qa.views.test'),                                  
+    url(r'^ask/?.*$', 'qa.views.test'),                                         
+    url(r'^popular/?.*$', 'qa.views.test'),                                     
+    url(r'^new/?.*$', 'qa.views.test'),
+-*-*-*-
+-*-*-*-
+nano settings.py
+	DEBUG = False
+	add 'qa', to INSTALLED_APPS
+	comment (#) all MIDDLEWARE_CLASSES
+-*-*-*-
+cd
+cd web
+bash init.sh
+cd ask
+cd ask
+sudo gunicorn -b 0.0.0.0:8000 wsgi &
